@@ -255,11 +255,6 @@ function Index() {
               </div>
             ))}
           </div>
-          <p className="text-center text-xs text-muted-foreground mt-10 max-w-2xl mx-auto">
-            💳 Payments via Stripe — upgrade buttons call your backend{" "}
-            <code className="px-1 rounded bg-muted">/api/create-checkout-session</code>. Never put
-            Stripe secret keys in frontend code.
-          </p>
         </div>
       </section>
 
