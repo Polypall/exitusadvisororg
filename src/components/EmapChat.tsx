@@ -4,8 +4,8 @@ import ReactMarkdown from "react-markdown";
 import { chatWithEmap } from "@/lib/chat.functions";
 
 const EMAP_ICON = "https://i.postimg.cc/25sLq1hS/Untitled-design-1-removebg-preview.png";
-const STORAGE_KEY = "exitus.emap.chat.v1";
 const DISCLAIMER = "📋 General information only — not legal, financial, or immigration advice.";
+const MAX_INPUT_LENGTH = 2000;
 
 const QUICK_STARTS = [
   "What country fits a $1,500/mo budget?",
@@ -50,23 +50,6 @@ export function EmapChat({
   const scrollRef = useRef<HTMLDivElement>(null);
   const sendChat = useServerFn(chatWithEmap);
 
-  // Load history
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) setMessages(JSON.parse(raw));
-    } catch {}
-  }, []);
-
-  // Persist history
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
-    } catch {}
-  }, [messages]);
-
   // Auto-scroll
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
@@ -81,7 +64,7 @@ export function EmapChat({
   }, [seedCountry, open]);
 
   async function send(text: string) {
-    const trimmed = text.trim();
+    const trimmed = text.trim().slice(0, MAX_INPUT_LENGTH);
     if (!trimmed || loading) return;
     const next: Msg[] = [...messages, { role: "user", content: trimmed }];
     setMessages(next);
@@ -106,7 +89,6 @@ export function EmapChat({
   function clearChat() {
     stopSpeaking();
     setMessages([]);
-    if (typeof window !== "undefined") localStorage.removeItem(STORAGE_KEY);
   }
 
   if (!open) return null;
@@ -210,7 +192,8 @@ export function EmapChat({
       >
         <input
           value={input}
-          onChange={(e) => setInput(e.target.value)}
+          onChange={(e) => setInput(e.target.value.slice(0, MAX_INPUT_LENGTH))}
+          maxLength={MAX_INPUT_LENGTH}
           placeholder="Ask Emap anything…"
           className="flex-1 px-3 py-2 rounded-full border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-accent"
         />

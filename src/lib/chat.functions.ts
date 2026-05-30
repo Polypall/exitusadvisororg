@@ -3,7 +3,7 @@ import { z } from "zod";
 
 const messageSchema = z.object({
   role: z.enum(["system", "user", "assistant"]),
-  content: z.string(),
+  content: z.string().max(2000),
 });
 
 const chatInputSchema = z.object({
