@@ -88,14 +88,6 @@ const PRICING = [
 ];
 
 function Index() {
-  const [chatOpen, setChatOpen] = useState(false);
-  const [seedCountry, setSeedCountry] = useState<string | null>(null);
-
-  function openChat(country?: string) {
-    setSeedCountry(country ?? null);
-    setChatOpen(true);
-  }
-
   return (
     <div className="min-h-screen bg-background text-foreground">
       {/* Nav */}
