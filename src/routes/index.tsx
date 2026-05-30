@@ -216,7 +216,7 @@ function Index() {
             Start free. Upgrade when you're ready to actually move.
           </p>
           <p className="text-center text-sm text-accent font-medium mb-12">
-            🚀 Paid tiers coming soon — stay tuned!
+            Paid tiers coming soon — stay tuned!
           </p>
           <div className="grid md:grid-cols-3 gap-6">
             {PRICING.map((tier) => (
