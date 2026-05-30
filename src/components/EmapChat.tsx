@@ -192,7 +192,8 @@ export function EmapChat({
       >
         <input
           value={input}
-          onChange={(e) => setInput(e.target.value)}
+          onChange={(e) => setInput(e.target.value.slice(0, MAX_INPUT_LENGTH))}
+          maxLength={MAX_INPUT_LENGTH}
           placeholder="Ask Emap anything…"
           className="flex-1 px-3 py-2 rounded-full border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-accent"
         />
