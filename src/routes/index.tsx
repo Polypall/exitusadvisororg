@@ -266,12 +266,12 @@ function Index() {
           </h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {[
-              { name: "Wise", desc: "Low-fee international transfers", url: "https://wise.com" },
-              { name: "SoFi", desc: "US travel-friendly banking", url: "https://sofi.com" },
-              { name: "Numbeo", desc: "Real cost-of-living data", url: "https://numbeo.com" },
-              { name: "Travel.State.Gov", desc: "Official US travel advisories", url: "https://travel.state.gov" },
-              { name: "AILA", desc: "Find an immigration lawyer", url: "https://aila.org" },
-              { name: "SafetyWing", desc: "International health insurance", url: "https://safetywing.com" },
+              { name: "Wise", desc: "Move money across borders, hold multiple currencies", url: "https://wise.com/" },
+              { name: "Schwab", desc: "International banking — US brokerage + checking with no foreign ATM fees (open before you leave)", url: "https://schwab.com/" },
+              { name: "Numbeo", desc: "Crowd-sourced cost-of-living estimates", url: "https://numbeo.com/" },
+              { name: "Travel.State.Gov", desc: "Official US travel advisories", url: "https://travel.state.gov/" },
+              { name: "AILA", desc: "Find a US immigration lawyer (for US visa/citizenship questions)", url: "https://aila.org/" },
+              { name: "SafetyWing", desc: "International health insurance for expats and nomads", url: "https://safetywing.com/" },
             ].map((r) => (
               <a
                 key={r.name}
