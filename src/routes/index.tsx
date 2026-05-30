@@ -1,6 +1,16 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
-import { EmapChat } from "@/components/EmapChat";
+
+declare global {
+  interface Window {
+    chatbase?: (...args: unknown[]) => void;
+  }
+}
+
+function openChat(_country?: string) {
+  if (typeof window !== "undefined" && typeof window.chatbase === "function") {
+    window.chatbase("open");
+  }
+}
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -78,14 +88,6 @@ const PRICING = [
 ];
 
 function Index() {
-  const [chatOpen, setChatOpen] = useState(false);
-  const [seedCountry, setSeedCountry] = useState<string | null>(null);
-
-  function openChat(country?: string) {
-    setSeedCountry(country ?? null);
-    setChatOpen(true);
-  }
-
   return (
     <div className="min-h-screen bg-background text-foreground">
       {/* Nav */}
@@ -301,16 +303,8 @@ function Index() {
         © 2025 EXIT US. General information only — not legal, financial, or immigration advice.
       </footer>
 
-      {/* Floating Emap */}
-      <button
-        onClick={() => setChatOpen((v) => !v)}
-        aria-label="Open Emap chat"
-        className="fixed bottom-6 right-6 z-50 h-14 w-14 rounded-full bg-[image:var(--gradient-gold)] shadow-[var(--shadow-glow)] hover:scale-110 transition-transform p-1 ring-4 ring-primary/30"
-      >
-        <img src={EMAP_ICON} alt="Emap" className="h-full w-full rounded-full" />
-      </button>
+      {/* Chatbase widget loads its own floating button via the script in __root.tsx */}
 
-      <EmapChat open={chatOpen} onClose={() => setChatOpen(false)} seedCountry={seedCountry} />
     </div>
   );
 }
