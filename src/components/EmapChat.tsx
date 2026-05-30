@@ -89,7 +89,6 @@ export function EmapChat({
   function clearChat() {
     stopSpeaking();
     setMessages([]);
-    if (typeof window !== "undefined") localStorage.removeItem(STORAGE_KEY);
   }
 
   if (!open) return null;
