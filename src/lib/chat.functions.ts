@@ -2,7 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 
 const messageSchema = z.object({
-  role: z.enum(["system", "user", "assistant"]),
+  role: z.enum(["user", "assistant"]),
   content: z.string().max(2000),
 });
 
