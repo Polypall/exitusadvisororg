@@ -4,8 +4,8 @@ import ReactMarkdown from "react-markdown";
 import { chatWithEmap } from "@/lib/chat.functions";
 
 const EMAP_ICON = "https://i.postimg.cc/25sLq1hS/Untitled-design-1-removebg-preview.png";
-const STORAGE_KEY = "exitus.emap.chat.v1";
 const DISCLAIMER = "📋 General information only — not legal, financial, or immigration advice.";
+const MAX_INPUT_LENGTH = 2000;
 
 const QUICK_STARTS = [
   "What country fits a $1,500/mo budget?",
