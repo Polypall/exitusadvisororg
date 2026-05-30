@@ -1,6 +1,16 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
-import { EmapChat } from "@/components/EmapChat";
+
+declare global {
+  interface Window {
+    chatbase?: (...args: unknown[]) => void;
+  }
+}
+
+function openChat(_country?: string) {
+  if (typeof window !== "undefined" && typeof window.chatbase === "function") {
+    window.chatbase("open");
+  }
+}
 
 export const Route = createFileRoute("/")({
   component: Index,
