@@ -64,7 +64,7 @@ export function EmapChat({
   }, [seedCountry, open]);
 
   async function send(text: string) {
-    const trimmed = text.trim();
+    const trimmed = text.trim().slice(0, MAX_INPUT_LENGTH);
     if (!trimmed || loading) return;
     const next: Msg[] = [...messages, { role: "user", content: trimmed }];
     setMessages(next);
