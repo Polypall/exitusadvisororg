@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useState, useEffect } from "react";
 
 declare global {
   interface Window {
@@ -10,6 +11,78 @@ function openChat(_country?: string) {
   if (typeof window !== "undefined" && typeof window.chatbase === "function") {
     window.chatbase("open");
   }
+}
+
+function DisclaimerModal({ onAgree }: { onAgree: () => void }) {
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    const agreed = localStorage.getItem("exitus_terms_agreed");
+    if (agreed !== "true") {
+      setOpen(true);
+    }
+  }, []);
+
+  const handleAgree = () => {
+    localStorage.setItem("exitus_terms_agreed", "true");
+    setOpen(false);
+    onAgree();
+  };
+
+  if (!open) return null;
+
+  return (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 backdrop-blur-sm px-4">
+      <div className="w-full max-w-xl max-h-[85vh] overflow-y-auto rounded-2xl border border-border bg-card p-6 shadow-2xl">
+        <h2 className="text-2xl font-bold text-primary mb-2">Terms of Use</h2>
+        <p className="text-sm text-muted-foreground mb-4">
+          Before using Exitus, please review and agree to the following:
+        </p>
+
+        <div className="space-y-4 text-sm text-foreground mb-6">
+          <div className="rounded-xl bg-primary/5 border border-border p-4">
+            <h3 className="font-semibold text-primary mb-1">Not professional advice</h3>
+            <p className="text-muted-foreground">
+              Exitus provides general information only. It is not legal, immigration, financial, or tax advice. Always confirm with official sources and qualified professionals before making decisions.
+            </p>
+          </div>
+          <div className="rounded-xl bg-primary/5 border border-border p-4">
+            <h3 className="font-semibold text-primary mb-1">AI-generated guidance (Emap)</h3>
+            <p className="text-muted-foreground">
+              Emap's responses can be incomplete, outdated, or incorrect. Treat everything as a starting point for your own research — not a final answer or guarantee.
+            </p>
+          </div>
+          <div className="rounded-xl bg-primary/5 border border-border p-4">
+            <h3 className="font-semibold text-primary mb-1">Safety & country information</h3>
+            <p className="text-muted-foreground">
+              Conditions change quickly and may be outdated. Always check current travel advisories from your own government before making plans.
+            </p>
+          </div>
+          <div className="rounded-xl bg-primary/5 border border-border p-4">
+            <h3 className="font-semibold text-primary mb-1">No liability</h3>
+            <p className="text-muted-foreground">
+              Exitus is provided "as is" without warranties. We are not responsible for any loss, harm, cost, or decision that results from using this app.
+            </p>
+          </div>
+        </div>
+
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+          <button
+            onClick={handleAgree}
+            className="flex-1 py-3 rounded-full font-semibold text-primary bg-[image:var(--gradient-gold)] shadow-[var(--shadow-gold)] hover:scale-[1.02] transition-transform"
+          >
+            I Agree — Enter Exitus
+          </button>
+          <Link
+            to="/terms"
+            className="text-center py-3 px-4 rounded-full border border-input bg-background text-sm font-medium text-foreground hover:bg-accent transition"
+          >
+            Read full disclaimer →
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export const Route = createFileRoute("/")({
@@ -88,8 +161,12 @@ const PRICING = [
 ];
 
 function Index() {
+  const [agreed, setAgreed] = useState(false);
+
   return (
     <div className="min-h-screen bg-background text-foreground">
+      <DisclaimerModal onAgree={() => setAgreed(true)} />
+
       {/* Nav */}
       <nav className="sticky top-0 z-40 backdrop-blur-md bg-background/80 border-b border-border">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
@@ -299,8 +376,11 @@ function Index() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-border py-8 text-center text-sm text-muted-foreground px-6">
-        © 2025 EXIT US. General information only — not legal, financial, or immigration advice.
+      <footer className="border-t border-border py-8 text-center text-sm text-muted-foreground px-6 space-y-2">
+        <p>© 2025 EXIT US. General information only — not legal, financial, or immigration advice.</p>
+        <Link to="/terms" className="inline-block hover:text-primary transition underline underline-offset-2">
+          Disclaimer & Privacy Notice
+        </Link>
       </footer>
 
       {/* Chatbase widget loads its own floating button via the script in __root.tsx */}
