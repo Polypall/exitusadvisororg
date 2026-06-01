@@ -376,8 +376,11 @@ function Index() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-border py-8 text-center text-sm text-muted-foreground px-6">
-        © 2025 EXIT US. General information only — not legal, financial, or immigration advice.
+      <footer className="border-t border-border py-8 text-center text-sm text-muted-foreground px-6 space-y-2">
+        <p>© 2025 EXIT US. General information only — not legal, financial, or immigration advice.</p>
+        <Link to="/terms" className="inline-block hover:text-primary transition underline underline-offset-2">
+          Disclaimer & Privacy Notice
+        </Link>
       </footer>
 
       {/* Chatbase widget loads its own floating button via the script in __root.tsx */}
