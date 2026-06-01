@@ -161,8 +161,12 @@ const PRICING = [
 ];
 
 function Index() {
+  const [agreed, setAgreed] = useState(false);
+
   return (
     <div className="min-h-screen bg-background text-foreground">
+      <DisclaimerModal onAgree={() => setAgreed(true)} />
+
       {/* Nav */}
       <nav className="sticky top-0 z-40 backdrop-blur-md bg-background/80 border-b border-border">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
