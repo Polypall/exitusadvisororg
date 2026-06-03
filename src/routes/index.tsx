@@ -164,16 +164,75 @@ const PRICING = [
 
 function Index() {
   const [agreed, setAgreed] = useState(false);
+  const [showOnboarding, setShowOnboarding] = useState(false);
+  const [chatCount, setChatCount] = useState(0);
+  const [limitHit, setLimitHit] = useState(false);
 
   useEffect(() => {
     if (typeof window !== "undefined" && localStorage.getItem("exitus_terms_agreed") === "true") {
       setAgreed(true);
     }
+    setChatCount(getChatCount());
   }, []);
+
+  const remaining = Math.max(0, FREE_CHAT_LIMIT - chatCount);
+
+  const openChat = (_country?: string) => {
+    if (chatCount >= FREE_CHAT_LIMIT) {
+      setLimitHit(true);
+      return;
+    }
+    if (!getProfile()) {
+      setShowOnboarding(true);
+      return;
+    }
+    setChatCount(incrementChatCount());
+    openChatbase();
+  };
+
+  const handleOnboardingComplete = () => {
+    setShowOnboarding(false);
+    setChatCount(incrementChatCount());
+    openChatbase();
+  };
+
+  const warnedCountries = Object.entries(COUNTRY_WARNINGS);
 
   return (
     <div className="min-h-screen bg-background text-foreground">
       <DisclaimerModal onAgree={() => setAgreed(true)} />
+      <OnboardingModal
+        open={showOnboarding}
+        onClose={() => setShowOnboarding(false)}
+        onComplete={handleOnboardingComplete}
+      />
+
+      {limitHit && (
+        <div className="fixed inset-0 z-[105] flex items-center justify-center bg-black/70 backdrop-blur-sm px-4">
+          <div className="w-full max-w-md rounded-2xl border border-border bg-card p-6 shadow-2xl text-center">
+            <h2 className="text-2xl font-bold text-primary mb-2">Daily limit reached</h2>
+            <p className="text-sm text-muted-foreground mb-5">
+              You've used all {FREE_CHAT_LIMIT} free Emap chats today. Come back tomorrow, or join the waitlist for Settler (unlimited chats — coming soon).
+            </p>
+            <div className="flex flex-col gap-3">
+              <a
+                href={WAITLIST_URL}
+                target="_blank"
+                rel="noreferrer"
+                className="py-3 rounded-full font-semibold text-primary bg-[image:var(--gradient-gold)] shadow-[var(--shadow-gold)] hover:scale-[1.02] transition-transform"
+              >
+                Join the Settler waitlist →
+              </a>
+              <button
+                onClick={() => setLimitHit(false)}
+                className="py-2 text-sm text-muted-foreground hover:text-foreground"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div aria-hidden={!agreed} className={!agreed ? "pointer-events-none blur-sm select-none" : ""}>
 
