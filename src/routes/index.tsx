@@ -385,6 +385,7 @@ function Index() {
 
       {/* Chatbase widget loads its own floating button via the script in __root.tsx */}
 
+      </div>
     </div>
   );
 }
