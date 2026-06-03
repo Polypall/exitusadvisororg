@@ -143,20 +143,12 @@ const PRICING = [
     highlighted: false,
   },
   {
-    name: "Nomad",
-    price: "$9",
-    period: "/mo",
-    features: ["Unlimited chats", "Visa deep-dives", "Banking checklists", "Country comparison"],
-    cta: "Upgrade to Nomad",
-    highlighted: true,
-  },
-  {
     name: "Settler",
     price: "$29",
     period: "/mo",
-    features: ["Everything in Nomad", "Monthly strategy call", "Document checklist generator", "Tax & FBAR guide"],
+    features: ["Unlimited chats", "Monthly strategy call", "Document checklist generator", "Tax & FBAR guide"],
     cta: "Upgrade to Settler",
-    highlighted: false,
+    highlighted: true,
   },
 ];
 
@@ -297,7 +289,7 @@ function Index() {
           <p className="text-center text-sm text-accent font-medium mb-12">
             Paid tiers coming soon — stay tuned!
           </p>
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">
             {PRICING.map((tier) => (
               <div
                 key={tier.name}
