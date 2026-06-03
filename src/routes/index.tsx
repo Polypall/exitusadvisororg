@@ -152,6 +152,46 @@ const PRICING = [
   },
 ];
 
+type WarningLevel = "red" | "orange";
+const COUNTRY_WARNINGS: Record<string, { level: WarningLevel; reasons: string[] }> = {
+  // Red — active conflict or extreme instability
+  "Haiti": { level: "red", reasons: ["gang violence", "political collapse", "famine risk"] },
+  "Sudan": { level: "red", reasons: ["active civil war", "famine risk", "mass displacement"] },
+  "South Sudan": { level: "red", reasons: ["active conflict", "famine risk"] },
+  "Yemen": { level: "red", reasons: ["active war", "famine risk", "humanitarian crisis"] },
+  "Myanmar": { level: "red", reasons: ["military coup", "active conflict", "travel ban recommended"] },
+  "Venezuela": { level: "red", reasons: ["political instability", "economic collapse", "crime"] },
+  "Democratic Republic of Congo": { level: "red", reasons: ["armed conflict in eastern regions"] },
+  "Libya": { level: "red", reasons: ["active conflict", "no stable government"] },
+  "Somalia": { level: "red", reasons: ["active conflict", "terrorism risk", "no stable government"] },
+  // Orange — elevated risk, not recommended for relocation
+  "Ethiopia": { level: "orange", reasons: ["regional conflict", "ethnic tensions in some areas"] },
+  "Nicaragua": { level: "orange", reasons: ["authoritarian government", "political repression"] },
+  "Zimbabwe": { level: "orange", reasons: ["economic instability", "political repression"] },
+  "El Salvador": { level: "orange", reasons: ["gang crackdown laws may affect foreigners — verify current conditions"] },
+  "Pakistan": { level: "orange", reasons: ["political instability", "terrorism risk in certain regions"] },
+  "Nigeria": { level: "orange", reasons: ["security varies heavily by region — research specific area"] },
+};
+
+function CountryWarning({ country, className = "" }: { country: string; className?: string }) {
+  const w = COUNTRY_WARNINGS[country];
+  if (!w) return null;
+  const reasons = w.reasons.join(", ");
+  const isRed = w.level === "red";
+  const text = isRed
+    ? `We don't recommend ${country} for relocation right now — ${reasons}. Check Travel.State.Gov for current advisories.`
+    : `Heads up about ${country}: ${reasons}. Research your specific destination carefully and check Travel.State.Gov.`;
+  const styles = isRed
+    ? "bg-red-600/15 border-red-600/50 text-red-700 dark:text-red-300"
+    : "bg-amber-500/15 border-amber-500/50 text-amber-800 dark:text-amber-200";
+  return (
+    <div role="alert" className={`flex gap-2 items-start rounded-lg border px-3 py-2 text-xs ${styles} ${className}`}>
+      <span aria-hidden>⚠️</span>
+      <span>{text}</span>
+    </div>
+  );
+}
+
 function Index() {
   const [agreed, setAgreed] = useState(false);
 
@@ -279,6 +319,7 @@ function Index() {
                 <div className="font-bold text-primary text-lg">{c.name}</div>
                 <div className="text-xs text-muted-foreground mb-2">{c.region} · {c.cost}</div>
                 <div className="text-sm text-foreground">{c.highlight}</div>
+                <CountryWarning country={c.name} className="mt-3" />
               </button>
             ))}
           </div>
