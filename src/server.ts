@@ -1,4 +1,5 @@
 import "./lib/error-capture";
+import "./start";
 
 import { consumeLastCapturedError } from "./lib/error-capture";
 import { renderErrorPage } from "./lib/error-page";
