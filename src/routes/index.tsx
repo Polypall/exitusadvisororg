@@ -289,7 +289,7 @@ function Index() {
           <p className="text-center text-sm text-accent font-medium mb-12">
             Paid tiers coming soon — stay tuned!
           </p>
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">
             {PRICING.map((tier) => (
               <div
                 key={tier.name}
