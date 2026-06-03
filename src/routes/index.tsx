@@ -1,5 +1,15 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
+import { OnboardingModal } from "@/components/OnboardingModal";
+import {
+  COUNTRY_WARNINGS,
+  FREE_CHAT_LIMIT,
+  VISA_LINKS,
+  WAITLIST_URL,
+  getChatCount,
+  getProfile,
+  incrementChatCount,
+} from "@/lib/exitus";
 
 declare global {
   interface Window {
@@ -7,7 +17,7 @@ declare global {
   }
 }
 
-function openChat(_country?: string) {
+function openChatbase() {
   if (typeof window !== "undefined" && typeof window.chatbase === "function") {
     window.chatbase("open");
   }
