@@ -319,6 +319,7 @@ function Index() {
                 <div className="font-bold text-primary text-lg">{c.name}</div>
                 <div className="text-xs text-muted-foreground mb-2">{c.region} · {c.cost}</div>
                 <div className="text-sm text-foreground">{c.highlight}</div>
+                <CountryWarning country={c.name} className="mt-3" />
               </button>
             ))}
           </div>
