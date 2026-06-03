@@ -155,9 +155,17 @@ const PRICING = [
 function Index() {
   const [agreed, setAgreed] = useState(false);
 
+  useEffect(() => {
+    if (typeof window !== "undefined" && localStorage.getItem("exitus_terms_agreed") === "true") {
+      setAgreed(true);
+    }
+  }, []);
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       <DisclaimerModal onAgree={() => setAgreed(true)} />
+
+      <div aria-hidden={!agreed} className={!agreed ? "pointer-events-none blur-sm select-none" : ""}>
 
       {/* Nav */}
       <nav className="sticky top-0 z-40 backdrop-blur-md bg-background/80 border-b border-border">
