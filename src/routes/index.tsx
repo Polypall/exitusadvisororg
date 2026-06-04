@@ -310,9 +310,8 @@ function Index() {
         <div className="overflow-x-auto pb-4">
           <div className="flex gap-4 px-6 max-w-7xl mx-auto min-w-max">
             {COUNTRIES.map((c) => (
-              <button
+              <div
                 key={c.name}
-                onClick={() => openChat(c.name)}
                 className="text-left w-64 flex-shrink-0 bg-card border-2 border-border hover:border-accent rounded-2xl p-5 transition hover:shadow-[var(--shadow-gold)] hover:-translate-y-1"
               >
                 <div className="text-5xl mb-3">{c.flag}</div>
@@ -320,7 +319,20 @@ function Index() {
                 <div className="text-xs text-muted-foreground mb-2">{c.region} · {c.cost}</div>
                 <div className="text-sm text-foreground">{c.highlight}</div>
                 <CountryWarning country={c.name} className="mt-3" />
-              </button>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {c.links.map((link, i) => (
+                    <a
+                      key={link}
+                      href={link}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-primary/10 text-primary hover:bg-primary/20 transition"
+                    >
+                      {c.links.length === 1 ? "Visa Portal →" : `Portal ${i + 1} →`}
+                    </a>
+                  ))}
+                </div>
+              </div>
             ))}
           </div>
         </div>
