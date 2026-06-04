@@ -371,11 +371,11 @@ function Index() {
                   ))}
                 </ul>
                 <button
-                  onClick={() => alert("Payments coming soon — backend /api/create-checkout-session will handle Stripe.")}
-                  className={`w-full py-3 rounded-full font-semibold transition ${
+                  disabled
+                  className={`w-full py-3 rounded-full font-semibold opacity-60 cursor-default ${
                     tier.highlighted
-                      ? "bg-[image:var(--gradient-gold)] text-primary shadow-[var(--shadow-gold)] hover:scale-105"
-                      : "bg-primary text-primary-foreground hover:bg-primary/90"
+                      ? "bg-[image:var(--gradient-gold)] text-primary shadow-[var(--shadow-gold)]"
+                      : "bg-primary text-primary-foreground"
                   }`}
                 >
                   {tier.cta}
