@@ -123,14 +123,14 @@ const FEATURES = [
 ];
 
 const COUNTRIES = [
-  { flag: "🇹🇭", name: "Thailand", region: "SE Asia", cost: "$900–$2k/mo", highlight: "Easy visas, great food, strong expat scene." },
-  { flag: "🇬🇭", name: "Ghana", region: "West Africa", cost: "$700–$1.5k/mo", highlight: "Year of Return community, English-speaking." },
-  { flag: "🇲🇾", name: "Malaysia", region: "SE Asia", cost: "$1k–$2k/mo", highlight: "MM2H visa, multicultural, top healthcare." },
-  { flag: "🇨🇴", name: "Colombia", region: "Latin America", cost: "$900–$1.8k/mo", highlight: "Spring weather, digital nomad visa." },
-  { flag: "🇲🇦", name: "Morocco", region: "MENA", cost: "$800–$1.6k/mo", highlight: "1-year visa-free stays, gateway to EU." },
-  { flag: "🇰🇪", name: "Kenya", region: "East Africa", cost: "$800–$1.7k/mo", highlight: "Nairobi tech hub, Swahili-English." },
-  { flag: "🇻🇳", name: "Vietnam", region: "SE Asia", cost: "$700–$1.5k/mo", highlight: "Low cost, fast internet, food paradise." },
-  { flag: "🇦🇪", name: "UAE", region: "MENA", cost: "$2k–$5k/mo", highlight: "Tax-free income, golden visa pathway." },
+  { flag: "🇹🇭", name: "Thailand", region: "SE Asia", cost: "$900–$2k/mo", highlight: "Easy visas, great food, strong expat scene.", links: ["https://www.thaievisa.go.th/"] },
+  { flag: "🇬🇭", name: "Ghana", region: "West Africa", cost: "$700–$1.5k/mo", highlight: "Year of Return community, English-speaking.", links: ["https://gis.gov.gh/", "https://evisa.immigration.gov.gh/"] },
+  { flag: "🇲🇾", name: "Malaysia", region: "SE Asia", cost: "$1k–$2k/mo", highlight: "MM2H visa, multicultural, top healthcare.", links: ["https://www.imi.gov.my/", "https://www.mm2h.gov.my/"] },
+  { flag: "🇨🇴", name: "Colombia", region: "Latin America", cost: "$900–$1.8k/mo", highlight: "Spring weather, digital nomad visa.", links: ["https://www.cancilleria.gov.co/tramites_servicios/visa"] },
+  { flag: "🇲🇦", name: "Morocco", region: "MENA", cost: "$800–$1.6k/mo", highlight: "1-year visa-free stays, gateway to EU.", links: ["https://www.acces-maroc.ma"] },
+  { flag: "🇰🇪", name: "Kenya", region: "East Africa", cost: "$800–$1.7k/mo", highlight: "Nairobi tech hub, Swahili-English.", links: ["https://www.etakenya.go.ke"] },
+  { flag: "🇻🇳", name: "Vietnam", region: "SE Asia", cost: "$700–$1.5k/mo", highlight: "Low cost, fast internet, food paradise.", links: ["https://evisa.gov.vn"] },
+  { flag: "🇦🇪", name: "UAE", region: "MENA", cost: "$2k–$5k/mo", highlight: "Tax-free income, golden visa pathway.", links: ["https://icp.gov.ae"] },
 ];
 
 const PRICING = [
@@ -310,9 +310,8 @@ function Index() {
         <div className="overflow-x-auto pb-4">
           <div className="flex gap-4 px-6 max-w-7xl mx-auto min-w-max">
             {COUNTRIES.map((c) => (
-              <button
+              <div
                 key={c.name}
-                onClick={() => openChat(c.name)}
                 className="text-left w-64 flex-shrink-0 bg-card border-2 border-border hover:border-accent rounded-2xl p-5 transition hover:shadow-[var(--shadow-gold)] hover:-translate-y-1"
               >
                 <div className="text-5xl mb-3">{c.flag}</div>
@@ -320,7 +319,20 @@ function Index() {
                 <div className="text-xs text-muted-foreground mb-2">{c.region} · {c.cost}</div>
                 <div className="text-sm text-foreground">{c.highlight}</div>
                 <CountryWarning country={c.name} className="mt-3" />
-              </button>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {c.links.map((link, i) => (
+                    <a
+                      key={link}
+                      href={link}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-primary/10 text-primary hover:bg-primary/20 transition"
+                    >
+                      {c.links.length === 1 ? "Visa Portal →" : `Portal ${i + 1} →`}
+                    </a>
+                  ))}
+                </div>
+              </div>
             ))}
           </div>
         </div>
