@@ -305,7 +305,7 @@ function Index() {
           <h2 className="text-3xl md:text-4xl font-bold text-primary text-center mb-3">
             Popular destinations
           </h2>
-          <p className="text-center text-muted-foreground">Tap a country to chat with Emap about it.</p>
+          <p className="text-center text-muted-foreground">Ask Emap about these popular destinations</p>
         </div>
         <div className="overflow-x-auto pb-4">
           <div className="flex gap-4 px-6 max-w-7xl mx-auto min-w-max">
