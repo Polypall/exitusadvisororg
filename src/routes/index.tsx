@@ -430,9 +430,14 @@ function Index() {
 
       {/* Footer */}
       <footer className="border-t border-border py-8 text-center text-sm text-muted-foreground px-6 space-y-2">
-        <a href="https://fazier.com/launches/exitusadvisor.org" target="_blank" rel="noreferrer" className="inline-block mb-4">
-          <img src="https://fazier.com/api/v1//public/badges/launch_badges.svg?badge_type=featured&theme=dark" width={250} alt="Fazier badge" />
-        </a>
+        <div className="flex flex-wrap items-center justify-center gap-4 mb-4">
+          <a href="https://fazier.com/launches/exitusadvisor.org" target="_blank" rel="noreferrer" className="inline-block">
+            <img src="https://fazier.com/api/v1//public/badges/launch_badges.svg?badge_type=featured&theme=dark" width={250} alt="Fazier badge" />
+          </a>
+          <a href="https://fazier.com/launches/exitusadvisor.org" target="_blank" rel="noreferrer" className="inline-block">
+            <img src="https://fazier.com/api/v1//public/badges/launch_badges.svg?badge_type=launched&theme=dark" width={120} alt="Fazier badge" />
+          </a>
+        </div>
         <p>© 2026 EXIT US. General information only — not legal, financial, or immigration advice.</p>
         <Link to="/terms" className="inline-block hover:text-primary transition underline underline-offset-2">
           Disclaimer & Privacy Notice
