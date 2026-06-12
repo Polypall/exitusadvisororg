@@ -153,6 +153,20 @@ const PRICING = [
   },
 ];
 
+async function handleUpgrade() {
+  try {
+    const res = await fetch("/api/create-checkout-session", { method: "POST" });
+    const data = await res.json();
+    if (data.url) {
+      window.location.href = data.url;
+    } else {
+      alert("Something went wrong starting checkout. Please try again.");
+    }
+  } catch {
+    alert("Connection error. Please try again.");
+  }
+}
+
 function Index() {
   const [agreed, setAgreed] = useState(false);
 
@@ -323,7 +337,7 @@ function Index() {
                   ))}
                 </ul>
                 <button
-                  onClick={() => alert("Payments coming soon — backend /api/create-checkout-session will handle Stripe.")}
+                  onClick={tier.price === "Free" ? () => openChat() : handleUpgrade}
                   className={`w-full py-3 rounded-full font-semibold transition ${
                     tier.highlighted
                       ? "bg-[image:var(--gradient-gold)] text-primary shadow-[var(--shadow-gold)] hover:scale-105"
