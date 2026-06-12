@@ -116,14 +116,14 @@ const FEATURES = [
 ];
 
 const COUNTRIES = [
-  { flag: "🇹🇭", name: "Thailand", region: "SE Asia", cost: "$900–$2k/mo", highlight: "Easy visas, great food, strong expat scene." },
-  { flag: "🇬🇭", name: "Ghana", region: "West Africa", cost: "$700–$1.5k/mo", highlight: "Year of Return community, English-speaking." },
-  { flag: "🇲🇾", name: "Malaysia", region: "SE Asia", cost: "$1k–$2k/mo", highlight: "MM2H visa, multicultural, top healthcare." },
-  { flag: "🇨🇴", name: "Colombia", region: "Latin America", cost: "$900–$1.8k/mo", highlight: "Spring weather, digital nomad visa." },
-  { flag: "🇲🇦", name: "Morocco", region: "MENA", cost: "$800–$1.6k/mo", highlight: "1-year visa-free stays, gateway to EU." },
-  { flag: "🇰🇪", name: "Kenya", region: "East Africa", cost: "$800–$1.7k/mo", highlight: "Nairobi tech hub, Swahili-English." },
-  { flag: "🇻🇳", name: "Vietnam", region: "SE Asia", cost: "$700–$1.5k/mo", highlight: "Low cost, fast internet, food paradise." },
-  { flag: "🇦🇪", name: "UAE", region: "MENA", cost: "$2k–$5k/mo", highlight: "Tax-free income, golden visa pathway." },
+  { flag: "🇹🇭", name: "Thailand", region: "SE Asia", cost: "$900–$2k/mo", highlight: "Easy visas, great food, strong expat scene.", links: ["https://www.thaievisa.go.th/"] },
+  { flag: "🇬🇭", name: "Ghana", region: "West Africa", cost: "$700–$1.5k/mo", highlight: "Year of Return community, English-speaking.", links: ["https://gis.gov.gh/", "https://evisa.immigration.gov.gh/"] },
+  { flag: "🇲🇾", name: "Malaysia", region: "SE Asia", cost: "$1k–$2k/mo", highlight: "MM2H visa, multicultural, top healthcare.", links: ["https://www.imi.gov.my/", "https://www.mm2h.gov.my/"] },
+  { flag: "🇨🇴", name: "Colombia", region: "Latin America", cost: "$900–$1.8k/mo", highlight: "Spring weather, digital nomad visa.", links: ["https://www.cancilleria.gov.co/tramites_servicios/visa"] },
+  { flag: "🇲🇦", name: "Morocco", region: "MENA", cost: "$800–$1.6k/mo", highlight: "1-year visa-free stays, gateway to EU.", links: ["https://www.acces-maroc.ma"] },
+  { flag: "🇰🇪", name: "Kenya", region: "East Africa", cost: "$800–$1.7k/mo", highlight: "Nairobi tech hub, Swahili-English.", links: ["https://www.etakenya.go.ke"] },
+  { flag: "🇻🇳", name: "Vietnam", region: "SE Asia", cost: "$700–$1.5k/mo", highlight: "Low cost, fast internet, food paradise.", links: ["https://evisa.gov.vn"] },
+  { flag: "🇦🇪", name: "UAE", region: "MENA", cost: "$2k–$5k/mo", highlight: "Tax-free income, golden visa pathway.", links: ["https://icp.gov.ae"] },
 ];
 
 const PRICING = [
@@ -131,25 +131,17 @@ const PRICING = [
     name: "Explorer",
     price: "Free",
     period: "",
-    features: ["5 Emap chats / day", "Country cards", "Basic banking tips"],
+    features: ["5 Emap chats / day", "Visa options", "Basic banking tips"],
     cta: "Start free",
     highlighted: false,
-  },
-  {
-    name: "Nomad",
-    price: "$9",
-    period: "/mo",
-    features: ["Unlimited chats", "Visa deep-dives", "Banking checklists", "Country comparison"],
-    cta: "Upgrade to Nomad",
-    highlighted: true,
   },
   {
     name: "Settler",
     price: "$29",
     period: "/mo",
-    features: ["Everything in Nomad", "Monthly strategy call", "Document checklist generator", "Tax & FBAR guide"],
+    features: ["Unlimited chats", "Access to Exitus expat online group"],
     cta: "Upgrade to Settler",
-    highlighted: false,
+    highlighted: true,
   },
 ];
 
@@ -167,12 +159,58 @@ async function handleUpgrade() {
   }
 }
 
+type WarningLevel = "red" | "orange";
+const COUNTRY_WARNINGS: Record<string, { level: WarningLevel; reasons: string[] }> = {
+  "Haiti": { level: "red", reasons: ["gang violence", "political collapse", "famine risk"] },
+  "Sudan": { level: "red", reasons: ["active civil war", "famine risk", "mass displacement"] },
+  "South Sudan": { level: "red", reasons: ["active conflict", "famine risk"] },
+  "Yemen": { level: "red", reasons: ["active war", "famine risk", "humanitarian crisis"] },
+  "Myanmar": { level: "red", reasons: ["military coup", "active conflict", "travel ban recommended"] },
+  "Venezuela": { level: "red", reasons: ["political instability", "economic collapse", "crime"] },
+  "Democratic Republic of Congo": { level: "red", reasons: ["armed conflict in eastern regions"] },
+  "Libya": { level: "red", reasons: ["active conflict", "no stable government"] },
+  "Somalia": { level: "red", reasons: ["active conflict", "terrorism risk", "no stable government"] },
+  "Ethiopia": { level: "orange", reasons: ["regional conflict", "ethnic tensions in some areas"] },
+  "Nicaragua": { level: "orange", reasons: ["authoritarian government", "political repression"] },
+  "Zimbabwe": { level: "orange", reasons: ["economic instability", "political repression"] },
+  "El Salvador": { level: "orange", reasons: ["gang crackdown laws may affect foreigners — verify current conditions"] },
+  "Pakistan": { level: "orange", reasons: ["political instability", "terrorism risk in certain regions"] },
+  "Nigeria": { level: "orange", reasons: ["security varies heavily by region — research specific area"] },
+};
+
+function CountryWarning({ country, className = "" }: { country: string; className?: string }) {
+  const w = COUNTRY_WARNINGS[country];
+  if (!w) return null;
+  const reasons = w.reasons.join(", ");
+  const isRed = w.level === "red";
+  const text = isRed
+    ? `We don't recommend ${country} for relocation right now — ${reasons}. Check Travel.State.Gov for current advisories.`
+    : `Heads up about ${country}: ${reasons}. Research your specific destination carefully and check Travel.State.Gov.`;
+  const styles = isRed
+    ? "bg-red-600/15 border-red-600/50 text-red-700 dark:text-red-300"
+    : "bg-amber-500/15 border-amber-500/50 text-amber-800 dark:text-amber-200";
+  return (
+    <div role="alert" className={`flex gap-2 items-start rounded-lg border px-3 py-2 text-xs ${styles} ${className}`}>
+      <span aria-hidden>⚠️</span>
+      <span>{text}</span>
+    </div>
+  );
+}
+
 function Index() {
   const [agreed, setAgreed] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && localStorage.getItem("exitus_terms_agreed") === "true") {
+      setAgreed(true);
+    }
+  }, []);
 
   return (
     <div className="min-h-screen bg-background text-foreground">
       <DisclaimerModal onAgree={() => setAgreed(true)} />
+
+      <div aria-hidden={!agreed} className={!agreed ? "pointer-events-none blur-sm select-none" : ""}>
 
       {/* Nav */}
       <nav className="sticky top-0 z-40 backdrop-blur-md bg-background/80 border-b border-border">
@@ -272,21 +310,34 @@ function Index() {
           <h2 className="text-3xl md:text-4xl font-bold text-primary text-center mb-3">
             Popular destinations
           </h2>
-          <p className="text-center text-muted-foreground">Tap a country to chat with Emap about it.</p>
+          <p className="text-center text-muted-foreground">Ask Emap about these popular destinations</p>
         </div>
         <div className="overflow-x-auto pb-4">
           <div className="flex gap-4 px-6 max-w-7xl mx-auto min-w-max">
             {COUNTRIES.map((c) => (
-              <button
+              <div
                 key={c.name}
-                onClick={() => openChat(c.name)}
                 className="text-left w-64 flex-shrink-0 bg-card border-2 border-border hover:border-accent rounded-2xl p-5 transition hover:shadow-[var(--shadow-gold)] hover:-translate-y-1"
               >
                 <div className="text-5xl mb-3">{c.flag}</div>
                 <div className="font-bold text-primary text-lg">{c.name}</div>
                 <div className="text-xs text-muted-foreground mb-2">{c.region} · {c.cost}</div>
                 <div className="text-sm text-foreground">{c.highlight}</div>
-              </button>
+                <CountryWarning country={c.name} className="mt-3" />
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {c.links.map((link, i) => (
+                    <a
+                      key={link}
+                      href={link}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-primary/10 text-primary hover:bg-primary/20 transition"
+                    >
+                      {c.links.length === 1 ? "Visa Portal →" : `Portal ${i + 1} →`}
+                    </a>
+                  ))}
+                </div>
+              </div>
             ))}
           </div>
         </div>
@@ -304,7 +355,7 @@ function Index() {
           <p className="text-center text-sm text-accent font-medium mb-12">
             Paid tiers coming soon — stay tuned!
           </p>
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">
             {PRICING.map((tier) => (
               <div
                 key={tier.name}
@@ -384,7 +435,10 @@ function Index() {
 
       {/* Footer */}
       <footer className="border-t border-border py-8 text-center text-sm text-muted-foreground px-6 space-y-2">
-        <p>© 2025 EXIT US. General information only — not legal, financial, or immigration advice.</p>
+        <a href="https://fazier.com/launches/exitusadvisor.org" target="_blank" rel="noreferrer" className="inline-block mb-4">
+          <img src="https://fazier.com/api/v1//public/badges/launch_badges.svg?badge_type=featured&theme=dark" width={250} alt="Fazier badge" />
+        </a>
+        <p>© 2026 EXIT US. General information only — not legal, financial, or immigration advice.</p>
         <Link to="/terms" className="inline-block hover:text-primary transition underline underline-offset-2">
           Disclaimer & Privacy Notice
         </Link>
@@ -392,6 +446,7 @@ function Index() {
 
       {/* Chatbase widget loads its own floating button via the script in __root.tsx */}
 
+      </div>
     </div>
   );
 }

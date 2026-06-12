@@ -35,7 +35,7 @@ Before you apply for any visa or residency, send any money, or make any decision
   },
   {
     title: "Your privacy and your data",
-    content: `Exitus is built to respect your privacy. The answers you give Emap and any information you enter are saved only in your own browser, on your own device (local storage). We do not collect, store, see, or sell your personal information, and there is no account to create or log in to. If you clear your browser data, that information is gone. Because it lives on your device, keep that in mind if you share the device with anyone else.`,
+    content: `Exitus is built to respect your privacy, and we keep what we collect to a minimum. There's no account to create or log in to, and any preferences the site itself saves are stored in your own browser, on your own device — if you clear your browser data, that's gone.\n\nOne important exception you should know about: Emap, our chat assistant, is powered by a third-party AI service (Chatbase). When you chat with Emap, the messages you send are transmitted to and stored on that service's servers (located in the US) so it can generate replies, and so we can review conversations to improve Emap. The provider states it does not use this data to train its AI models, but your messages do leave your device and are held by a third party. For that reason, please don't share sensitive personal information in the chat — such as your full legal name, passport or ID numbers, or financial account details. Share only as much as you're comfortable with; general, non-identifying answers are all Emap needs to help.`,
   },
   {
     title: "No liability",
@@ -71,7 +71,7 @@ function TermsPage() {
           Disclaimer & Privacy Notice
         </h1>
         <p className="text-sm text-muted-foreground mb-12">
-          Last updated: May 31st, 2026
+          Last updated: June 3rd, 2026
         </p>
 
         <div className="space-y-10">
