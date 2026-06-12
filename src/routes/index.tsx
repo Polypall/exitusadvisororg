@@ -1,16 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 
-declare global {
-  interface Window {
-    chatbase?: (...args: unknown[]) => void;
-  }
-}
-
 function openChat(_country?: string) {
-  if (typeof window !== "undefined" && typeof window.chatbase === "function") {
-    window.chatbase("open");
-  }
+  // Opens the Emap chat widget — dispatches a custom event the EmapChat component listens for
+  window.dispatchEvent(new CustomEvent("exitus:open-chat", { detail: { country: _country } }));
 }
 
 function DisclaimerModal({ onAgree }: { onAgree: () => void }) {
@@ -152,9 +145,22 @@ const PRICING = [
   },
 ];
 
+async function handleUpgrade() {
+  try {
+    const res = await fetch("/api/create-checkout-session", { method: "POST" });
+    const data = await res.json();
+    if (data.url) {
+      window.location.href = data.url;
+    } else {
+      alert("Something went wrong starting checkout. Please try again.");
+    }
+  } catch {
+    alert("Connection error. Please try again.");
+  }
+}
+
 type WarningLevel = "red" | "orange";
 const COUNTRY_WARNINGS: Record<string, { level: WarningLevel; reasons: string[] }> = {
-  // Red — active conflict or extreme instability
   "Haiti": { level: "red", reasons: ["gang violence", "political collapse", "famine risk"] },
   "Sudan": { level: "red", reasons: ["active civil war", "famine risk", "mass displacement"] },
   "South Sudan": { level: "red", reasons: ["active conflict", "famine risk"] },
@@ -164,7 +170,6 @@ const COUNTRY_WARNINGS: Record<string, { level: WarningLevel; reasons: string[] 
   "Democratic Republic of Congo": { level: "red", reasons: ["armed conflict in eastern regions"] },
   "Libya": { level: "red", reasons: ["active conflict", "no stable government"] },
   "Somalia": { level: "red", reasons: ["active conflict", "terrorism risk", "no stable government"] },
-  // Orange — elevated risk, not recommended for relocation
   "Ethiopia": { level: "orange", reasons: ["regional conflict", "ethnic tensions in some areas"] },
   "Nicaragua": { level: "orange", reasons: ["authoritarian government", "political repression"] },
   "Zimbabwe": { level: "orange", reasons: ["economic instability", "political repression"] },
@@ -383,11 +388,11 @@ function Index() {
                   ))}
                 </ul>
                 <button
-                  disabled
-                  className={`w-full py-3 rounded-full font-semibold opacity-60 cursor-default ${
+                  onClick={tier.price === "Free" ? () => openChat() : handleUpgrade}
+                  className={`w-full py-3 rounded-full font-semibold transition ${
                     tier.highlighted
-                      ? "bg-[image:var(--gradient-gold)] text-primary shadow-[var(--shadow-gold)]"
-                      : "bg-primary text-primary-foreground"
+                      ? "bg-[image:var(--gradient-gold)] text-primary shadow-[var(--shadow-gold)] hover:scale-105"
+                      : "bg-primary text-primary-foreground hover:bg-primary/90"
                   }`}
                 >
                   {tier.cta}
