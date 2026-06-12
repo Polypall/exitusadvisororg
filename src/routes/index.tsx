@@ -1,16 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 
-declare global {
-  interface Window {
-    chatbase?: (...args: unknown[]) => void;
-  }
-}
-
 function openChat(_country?: string) {
-  if (typeof window !== "undefined" && typeof window.chatbase === "function") {
-    window.chatbase("open");
-  }
+  // Opens the Emap chat widget — dispatches a custom event the EmapChat component listens for
+  window.dispatchEvent(new CustomEvent("exitus:open-chat", { detail: { country: _country } }));
 }
 
 function DisclaimerModal({ onAgree }: { onAgree: () => void }) {
