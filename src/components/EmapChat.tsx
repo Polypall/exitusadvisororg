@@ -42,12 +42,22 @@ export function EmapChat() {
   const [settler, setSettler] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
 
+  const GREETING: Message = {
+    role: "assistant",
+    content: "Hey there, I'm Emap! Ready to explore what life looks like beyond the West? Tell me — what matters most to you in your next home?",
+  };
+
   useEffect(() => {
     try {
       const stored = localStorage.getItem(CHAT_HISTORY_KEY);
-      if (stored) setMessages(JSON.parse(stored));
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        setMessages(parsed.length > 0 ? parsed : [GREETING]);
+      } else {
+        setMessages([GREETING]);
+      }
     } catch {
-      // ignore
+      setMessages([GREETING]);
     }
     setSettler(isSettler());
     setCount(getTodayCount());
@@ -147,13 +157,6 @@ export function EmapChat() {
 
           {/* Messages */}
           <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-background">
-            {messages.length === 0 && (
-              <div className="text-center text-muted-foreground text-sm pt-8">
-                <img src={EMAP_ICON} alt="" className="w-12 h-12 rounded-full mx-auto mb-3 opacity-60" />
-                <p>Hi! I'm Emap 👋</p>
-                <p className="mt-1">Tell me about yourself and I'll help you find your ideal country to relocate to.</p>
-              </div>
-            )}
             {messages.map((m, i) => (
               <div key={i} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
                 <div
@@ -195,6 +198,11 @@ export function EmapChat() {
             </div>
           )}
 
+          {/* Disclaimer footer */}
+          <div className="px-3 py-1.5 text-center text-[10px] text-muted-foreground bg-muted/30 border-t border-border">
+            EXIT US · This is general advice only, not legal advice. Consult official sources and immigration lawyers.
+          </div>
+
           {/* Input */}
           <div className="flex gap-2 p-3 border-t border-border bg-card">
             <textarea
@@ -202,7 +210,7 @@ export function EmapChat() {
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKey}
               disabled={atLimit || loading}
-              placeholder={atLimit ? "Daily limit reached" : "Ask Emap anything…"}
+              placeholder={atLimit ? "Daily limit reached" : "Tell Emap a bit about you to get started..."}
               rows={1}
               className="flex-1 resize-none rounded-xl border border-input bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary disabled:opacity-50"
             />
