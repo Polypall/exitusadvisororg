@@ -10,6 +10,7 @@ const FREE_LIMIT = 5;
 type Message = { role: "user" | "assistant"; content: string };
 
 function getTodayCount(): number {
+  if (typeof window === "undefined") return 0;
   const today = new Date().toDateString();
   const storedDate = localStorage.getItem(CHAT_DATE_KEY);
   if (storedDate !== today) {
@@ -22,30 +23,39 @@ function getTodayCount(): number {
 
 function incrementCount() {
   const count = getTodayCount();
-  localStorage.setItem(CHAT_COUNT_KEY, String(count + 1));
+  if (typeof window !== "undefined") {
+    localStorage.setItem(CHAT_COUNT_KEY, String(count + 1));
+  }
 }
 
 function isSettler(): boolean {
+  if (typeof window === "undefined") return false;
   return localStorage.getItem(TIER_KEY) === "settler";
 }
 
 export function EmapChat() {
   const [open, setOpen] = useState(false);
-  const [messages, setMessages] = useState<Message[]>(() => {
-    try {
-      const stored = localStorage.getItem(CHAT_HISTORY_KEY);
-      return stored ? JSON.parse(stored) : [];
-    } catch {
-      return [];
-    }
-  });
+  const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [count, setCount] = useState(0);
+  const [settler, setSettler] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    try {
+      const stored = localStorage.getItem(CHAT_HISTORY_KEY);
+      if (stored) setMessages(JSON.parse(stored));
+    } catch {
+      // ignore
+    }
+    setSettler(isSettler());
     setCount(getTodayCount());
+  }, []);
+
+  useEffect(() => {
+    setCount(getTodayCount());
+    setSettler(isSettler());
   }, [open]);
 
   useEffect(() => {
@@ -55,11 +65,13 @@ export function EmapChat() {
   }, []);
 
   useEffect(() => {
-    localStorage.setItem(CHAT_HISTORY_KEY, JSON.stringify(messages));
+    if (typeof window !== "undefined") {
+      localStorage.setItem(CHAT_HISTORY_KEY, JSON.stringify(messages));
+    }
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  const atLimit = !isSettler() && count >= FREE_LIMIT;
+  const atLimit = !settler && count >= FREE_LIMIT;
 
   async function sendMessage() {
     if (!input.trim() || loading || atLimit) return;
@@ -177,7 +189,7 @@ export function EmapChat() {
           )}
 
           {/* Free tier counter */}
-          {!isSettler() && !atLimit && (
+          {!settler && !atLimit && (
             <div className="px-4 py-1 bg-muted/50 text-xs text-center text-muted-foreground border-t border-border">
               {FREE_LIMIT - count} free chat{FREE_LIMIT - count !== 1 ? "s" : ""} remaining today
             </div>
