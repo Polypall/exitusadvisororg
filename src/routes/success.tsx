@@ -108,12 +108,12 @@ function SuccessPage() {
               <div className="text-sm text-muted-foreground">
                 Join the group:{" "}
                 <a
-                  href="https://tally.so/r/Bz2QaQ"
+                  href="https://discord.gg/TVJk5VqE"
                   target="_blank"
                   rel="noreferrer"
                   className="text-primary underline"
                 >
-                  Access here →
+                  Join Discord →
                 </a>
               </div>
             </div>
