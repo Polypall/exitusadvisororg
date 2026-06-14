@@ -349,11 +349,8 @@ function Index() {
           <h2 className="text-3xl md:text-4xl font-bold text-primary text-center mb-3">
             Simple pricing
           </h2>
-          <p className="text-center text-muted-foreground mb-3">
+          <p className="text-center text-muted-foreground mb-12">
             Start free. Upgrade when you're ready to actually move.
-          </p>
-          <p className="text-center text-sm text-accent font-medium mb-12">
-            Paid tiers coming soon — stay tuned!
           </p>
           <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">
             {PRICING.map((tier) => (
@@ -368,11 +365,6 @@ function Index() {
                 {tier.highlighted && (
                   <div className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-[image:var(--gradient-gold)] text-primary mb-3">
                     Most popular
-                  </div>
-                )}
-                {tier.price !== "Free" && (
-                  <div className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-muted text-muted-foreground mb-3 ml-2">
-                    Coming soon
                   </div>
                 )}
                 <h3 className="text-xl font-bold text-primary">{tier.name}</h3>
